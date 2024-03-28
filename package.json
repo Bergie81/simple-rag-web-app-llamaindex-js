@@ -1,14 +1,14 @@
 {
 	"name": "js-rag-web-app-llamaindex",
-	"version": "1.0.0",
-	"description": "",
+	"version": "0.0.1",
+	"description": "JavaScript RAG Web App with LlamaIndex",
 	"main": "app.js",
 	"type": "module",
 	"scripts": {
-		"start": "node --watch api-server/app.js"
+		"start": "node --watch src/app.js"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Thomas Bergmann <bergie81@gmail.com>",
 	"license": "ISC",
 	"dependencies": {
 		"body-parser": "^1.20.2",

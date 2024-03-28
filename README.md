@@ -1,1 +1,1 @@
-# JavaScript RAG Web Apps with LlamaIndex
+# JavaScript RAG Web App with LlamaIndex

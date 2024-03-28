@@ -4,7 +4,7 @@ import "dotenv/config";
 
 // Load our data from a local directory
 const documents = await new SimpleDirectoryReader().loadData({
-	directoryPath: "../data",
+	directoryPath: "../src/data",
 });
 
 // Initialize an index
