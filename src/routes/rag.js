@@ -3,7 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import "dotenv/config";
-
 import { VectorStoreIndex, SimpleDirectoryReader } from "llamaindex";
 
 const router = express.Router();
