@@ -11,7 +11,7 @@ const documents = await new llamaIndex.SimpleDirectoryReader().loadData({
 const index = await llamaIndex.VectorStoreIndex.fromDocuments(documents);
 
 // LLM to answer questions, embedding model to encode them
-let customLLM = new llamaIndex.OpenAI();
+let customLLM = new llamaIndex.OpenAI(); // .Groq() for Groq
 let customEmbedding = new llamaIndex.OpenAIEmbedding();
 
 // Let's put the LLM and the embedding model into a ServiceContext object
