@@ -10,13 +10,35 @@ const ChatForm = () => {
 		const response = await fetch("http://localhost:3333/rag", {
 			method: "POST",
 			headers: {
+				Accept: "application/json, text/plain, */*",
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ query }),
 		});
-		const data = await response.json();
-		console.log("Response from the server:", data);
-		setAnswer(data.response);
+		if (!response.ok || !response.body) {
+			throw response.statusText;
+		}
+
+		// Here we start prepping for the streaming response
+		const reader = response.body.getReader();
+		const decoder = new TextDecoder();
+		let isFirstChunk = true;
+
+		while (true) {
+			// Here we start reading the stream, until its done.
+			const { value, done } = await reader.read();
+			if (done) {
+				break;
+			}
+			const decodedChunk = decoder.decode(value, { stream: true });
+			if (isFirstChunk) {
+				setAnswer(decodedChunk); // set the first chunk as the answer
+				isFirstChunk = false; // subsequent chunks will be appended
+			} else {
+				setAnswer((answer) => answer + decodedChunk); // update state with new chunk
+			}
+			setQuery(""); // clear the input field
+		}
 	};
 
 	// Function to update the state with the input value

@@ -3,7 +3,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import "dotenv/config";
-import { storageContextFromDefaults, VectorStoreIndex } from "llamaindex";
+import {
+	storageContextFromDefaults,
+	VectorStoreIndex,
+	ContextChatEngine,
+} from "llamaindex";
 
 const router = express.Router();
 
@@ -33,27 +37,41 @@ const askDocs = async (query) => {
 		storageContext,
 	});
 
-	// Create a query engine: convenience function combines several components: Retriever, Postprocessing, Synthesizer
+	/* // Create a query engine: convenience function combines several components: Retriever, Postprocessing, Synthesizer
 	const queryEngine = index.asQueryEngine();
 
 	// Ask a question
 	const response = await queryEngine.query({
 		query,
-	});
-	// console.log(response.toString());
+	}); */
+	const retriever = index.asRetriever();
+	retriever.similarityTopK = 3; // How many pieces of data to return from your vector store
 
-	return response.toString();
+	let chatEngine = new ContextChatEngine({
+		retriever,
+	});
+
+	const response = await chatEngine.chat({
+		message: query,
+		// chatHistory: messageHistory,
+		stream: true,
+	});
+
+	return response;
 };
 
 // POST
 router.post("/", async (req, res, next) => {
 	console.log("API FUNCTION CALLED!");
 	const { query } = req.body;
-	const response = await askDocs(query);
-	res.status(200).json({
-		message: "Answer fetched!",
-		response,
-	});
+	const stream = await askDocs(query);
+	res.status(200);
+	for await (const data of stream) {
+		// here express will stream the response
+		res.write(data.response || "");
+	}
+	// here express sends the closing/done/end signal for the stream consumer
+	res.end();
 });
 
 export default router;
