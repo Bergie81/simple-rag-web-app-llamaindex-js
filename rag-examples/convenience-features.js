@@ -17,7 +17,7 @@ const storageContext = await storageContextFromDefaults({
 
 /* // Load the data and create an index
 const documents = await new SimpleDirectoryReader().loadData({
-	directoryPath: "../src/data",  
+	directoryPath: "./data",  
 });
 let index = await VectorStoreIndex.fromDocuments(documents, {
 	storageContext,

@@ -5,6 +5,7 @@ import { dirname } from "path";
 import "dotenv/config";
 import {
 	storageContextFromDefaults,
+	SimpleDirectoryReader,
 	VectorStoreIndex,
 	ContextChatEngine,
 } from "llamaindex";
@@ -22,8 +23,8 @@ const askDocs = async (query) => {
 		persistDir: pathStorage,
 	});
 
-	// INFO: Run this code once to index the data and store it in the storage
-	/* // Load the data and create an index
+	/* // INFO: Run this code once to index the data and store it in the storage
+	// Load the data and create an index
 	const pathData = path.join(__dirname, "../data");
 	const documents = await new SimpleDirectoryReader().loadData({
 		directoryPath: pathData,

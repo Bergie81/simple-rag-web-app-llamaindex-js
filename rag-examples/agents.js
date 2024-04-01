@@ -11,14 +11,14 @@ import {
 
 // Document 1
 const documents1 = await new SimpleDirectoryReader().loadData({
-	directoryPath: "../src/data",
+	directoryPath: "./data",
 });
 const index1 = await VectorStoreIndex.fromDocuments(documents1);
 const queryEngine1 = index1.asQueryEngine();
 
 // Document 2
 const documents2 = await new SimpleDirectoryReader().loadData({
-	directoryPath: "../src/data2",
+	directoryPath: "./data2",
 });
 const index2 = await VectorStoreIndex.fromDocuments(documents2);
 const queryEngine2 = index2.asQueryEngine();
