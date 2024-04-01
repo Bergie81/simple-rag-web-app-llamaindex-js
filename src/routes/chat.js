@@ -5,7 +5,6 @@ import { dirname } from "path";
 import "dotenv/config";
 import {
 	storageContextFromDefaults,
-	SimpleDirectoryReader,
 	VectorStoreIndex,
 	ContextChatEngine,
 } from "llamaindex";
@@ -23,28 +22,11 @@ const askDocs = async (query) => {
 		persistDir: pathStorage,
 	});
 
-	/* // INFO: Run this code once to index the data and store it in the storage
-	// Load the data and create an index
-	const pathData = path.join(__dirname, "../data");
-	const documents = await new SimpleDirectoryReader().loadData({
-		directoryPath: pathData,
-	});
-	let index = await VectorStoreIndex.fromDocuments(documents, {
-		storageContext,
-	}); */
-
 	// Get an index without parsing the documents (storage already exists)
 	let index = await VectorStoreIndex.init({
 		storageContext,
 	});
 
-	/* // Create a query engine: convenience function combines several components: Retriever, Postprocessing, Synthesizer
-	const queryEngine = index.asQueryEngine();
-
-	// Ask a question
-	const response = await queryEngine.query({
-		query,
-	}); */
 	const retriever = index.asRetriever();
 	retriever.similarityTopK = 3; // How many pieces of data to return from your vector store
 
@@ -63,7 +45,7 @@ const askDocs = async (query) => {
 
 // POST
 router.post("/", async (req, res, next) => {
-	console.log("API FUNCTION CALLED!");
+	console.log("Calling LLM...");
 	const { query } = req.body;
 	const stream = await askDocs(query);
 	res.status(200);

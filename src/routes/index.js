@@ -1,7 +1,8 @@
 import bodyParser from "body-parser";
 
 // import authRoutes from "./auth";
-import ragRoutes from "./rag.js";
+import chatRoutes from "./chat.js";
+import reindexRoutes from "./reindex.js";
 import error from "../middleware/error.js";
 
 export default function (app) {
@@ -26,6 +27,7 @@ export default function (app) {
 	// application/json, to parse incoming json data in body:
 	app.use(bodyParser.json());
 	// app.use("/auth", authRoutes);
-	app.use("/rag", ragRoutes);
+	app.use("/chat", chatRoutes);
+	app.use("/reindex", reindexRoutes);
 	app.use(error); // General Error Handling Middleware
 }

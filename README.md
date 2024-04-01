@@ -1,4 +1,4 @@
-# RAG Web App with LlamaIndex.js
+# RAG Chat App with LlamaIndex.js
 
 **A chat agent that uses the RAG model to answer questions.**
 

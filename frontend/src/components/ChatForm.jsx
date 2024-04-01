@@ -7,7 +7,7 @@ const ChatForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setAnswer("Thinking...");
-		const response = await fetch("http://localhost:3333/rag", {
+		const response = await fetch("http://localhost:3333/chat", {
 			method: "POST",
 			headers: {
 				Accept: "application/json, text/plain, */*",
@@ -47,7 +47,7 @@ const ChatForm = () => {
 	};
 
 	return (
-		<div className="w-full px-12 min-h-48 h-[calc(100vh-180px)] flex flex-col gap-4">
+		<div className="w-full min-h-48 h-[calc(100vh-250px)] flex flex-col gap-4">
 			<div className="flex-grow shadow-md rounded-md p-6" id="answer">
 				{answer}
 			</div>
