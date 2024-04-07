@@ -2,8 +2,9 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import "dotenv/config";
+// import "dotenv/config";
 import {
+	Ollama,
 	storageContextFromDefaults,
 	VectorStoreIndex,
 	ContextChatEngine,
@@ -11,18 +12,20 @@ import {
 
 const router = express.Router();
 
-const askDocs = async (query) => {
+const ollama = new Ollama({ model: "mistral", temperature: 0.5 });
+
+const queryDocs = async (query) => {
 	// Get the directory of the app
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
 
-	// Create a storage context
+	// Get the storage and create the context
 	const pathStorage = path.join(__dirname, "../_storage");
 	const storageContext = await storageContextFromDefaults({
 		persistDir: pathStorage,
 	});
 
-	// Get an index without parsing the documents (storage already exists)
+	// Get an index from the existing storage
 	let index = await VectorStoreIndex.init({
 		storageContext,
 	});
@@ -30,7 +33,9 @@ const askDocs = async (query) => {
 	const retriever = index.asRetriever();
 	retriever.similarityTopK = 3; // How many pieces of data to return from your vector store
 
+	// Create the chat engine with the retrieved data and the chat model
 	let chatEngine = new ContextChatEngine({
+		chatModel: ollama,
 		retriever,
 	});
 
@@ -45,15 +50,14 @@ const askDocs = async (query) => {
 
 // POST
 router.post("/", async (req, res, next) => {
-	console.log("Calling LLM...");
+	console.log("Calling LLM on the backend...");
 	const { query } = req.body;
-	const stream = await askDocs(query);
+	const stream = await queryDocs(query);
 	res.status(200);
+	// Stream the response
 	for await (const data of stream) {
-		// here express will stream the response
 		res.write(data.response || "");
 	}
-	// here express sends the closing/done/end signal for the stream consumer
 	res.end();
 });
 

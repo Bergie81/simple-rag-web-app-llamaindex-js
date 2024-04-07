@@ -21,7 +21,7 @@
 
 ### RAG examples
 
-- cd into `rag-examples`
+- cd into `_rag-examples`
 - Run `node [FILENAME]`
 
 ## Features
@@ -29,7 +29,10 @@
 - [x] Index documents and store embeddings locally
 - [x] Chat interface
 - [x] Stream LLM output from backend to frontend
-- [ ] Connect to a local LLM
+- [x] Connect to a local LLM (Ollama)
+- [ ] Add chat history
 - [ ] Integrate Llama Parse
 - [ ] Use free embeddings
 - [ ] Optimize chunk sizing
+
+# https://docs.llamaindex.ai/en/stable/module_guides/models/llms/usage_custom/

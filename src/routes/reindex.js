@@ -49,7 +49,7 @@ const reIndex = async () => {
 router.post("/", async (req, res, next) => {
 	console.log("Re-indexing...");
 	const { isSuccess, message } = await reIndex();
-	console.log("STATUS", message);
+	console.log("STATUS:", message);
 	res.status(200).json({ success: isSuccess, message });
 });
 
