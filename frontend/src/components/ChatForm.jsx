@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ChatForm = () => {
+const ChatForm = ({ id }) => {
 	const [query, setQuery] = useState("");
 	const [answer, setAnswer] = useState("");
 
@@ -13,7 +13,7 @@ const ChatForm = () => {
 				Accept: "application/json, text/plain, */*",
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ query }),
+			body: JSON.stringify({ query, id }),
 		});
 		if (!response.ok || !response.body) {
 			throw response.statusText;
@@ -48,6 +48,7 @@ const ChatForm = () => {
 
 	return (
 		<div className="w-full min-h-48 h-[calc(100vh-250px)] flex flex-col gap-4">
+			<div> {id} </div>
 			<div className="flex-grow shadow-md rounded-md p-6" id="answer">
 				{answer}
 			</div>

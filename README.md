@@ -31,8 +31,7 @@
 - [x] Stream LLM output from backend to frontend
 - [x] Connect to a local LLM (Ollama)
 - [ ] Add chat history
+- [ ] Set up custom instructions
 - [ ] Integrate Llama Parse
 - [ ] Use free embeddings
 - [ ] Optimize chunk sizing
-
-# https://docs.llamaindex.ai/en/stable/module_guides/models/llms/usage_custom/

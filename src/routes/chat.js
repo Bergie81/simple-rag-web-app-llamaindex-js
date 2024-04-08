@@ -12,9 +12,11 @@ import {
 
 const router = express.Router();
 
-const ollama = new Ollama({ model: "mistral", temperature: 0.5 });
+const ollama = new Ollama({ model: "mistral", temperature: 0 });
 
-const queryDocs = async (query) => {
+let idMap = new Map();
+
+const queryDocs = async (query, id) => {
 	// Get the directory of the app
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
@@ -41,9 +43,11 @@ const queryDocs = async (query) => {
 
 	const response = await chatEngine.chat({
 		message: query,
-		// chatHistory: messageHistory,
+		chatHistory: idMap.get(id).messageHistory,
 		stream: true,
 	});
+
+	console.log("Message history: ", idMap.get(id).messageHistory);
 
 	return response;
 };
@@ -51,8 +55,16 @@ const queryDocs = async (query) => {
 // POST
 router.post("/", async (req, res, next) => {
 	console.log("Calling LLM on the backend...");
-	const { query } = req.body;
-	const stream = await queryDocs(query);
+	const { query, id } = req.body;
+
+	// Check if the id exists
+	if (!idMap.has(id)) {
+		console.log("New Chat ID received:", id);
+		idMap.set(id, { messageHistory: [] });
+	}
+
+	const stream = await queryDocs(query, id);
+
 	res.status(200);
 	// Stream the response
 	for await (const data of stream) {
